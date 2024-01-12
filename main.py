@@ -18,9 +18,14 @@ for i in range(0, 30):
     for row in table.find("tbody").find_all("tr"):
         span_title = row.find("span", {"title": lambda t: t and "گاز" in t})
         if span_title:
+            link = row.find("a", {"class": "hyperlink"})["href"]
+
             row_data = [
                 cell.get_text(strip=True) for cell in row.find_all(["td", "th"])
             ]
+
+            row_data.append(link)
+
             rows_data.append(row_data)
 
     all_rows_data.extend(rows_data)
@@ -37,6 +42,7 @@ columns = [
     "گروه خدمت",
     "تاريخ اعلام نیاز",
     "مهلت ارسال پاسخ",
+    "لینک"
 ]
 
 df = pd.DataFrame(all_rows_data, columns=columns)
