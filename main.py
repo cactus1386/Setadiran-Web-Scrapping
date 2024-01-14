@@ -1,3 +1,4 @@
+import re
 import requests
 import pandas as pd
 from bs4 import BeautifulSoup
@@ -6,7 +7,7 @@ page = 1
 
 all_rows_data = []
 
-for i in range(1,31):
+for i in range(0, 20):
     page += 1
     url = f"https://eproc.setadiran.ir/eproc/needs.do?pager=true&d-146909-p={page}"
 
@@ -19,18 +20,23 @@ for i in range(1,31):
     for row in table.find("tbody").find_all("tr"):
         span_title = row.find("span", {"title": lambda t: t and "گاز" in t})
         if span_title:
-            link = row.find("a", {"class": "hyperlink"})["href"]
+            link = row.find("a", {"class": "hyperlink"})["onclick"]
+
+            match = re.search(r"showPurchaseNeed\((\d+),\d+,(\d+)\)", link)
+            if match:
+                first_number = match.group(1)
+                third_number = match.group(2)
+
+            result_link = f"https://eproc.setadiran.ir/eproc/needDetailsInfoModal-load.do?reqId={first_number}&domainType=1431&needId={third_number}"
 
             row_data = [
                 cell.get_text(strip=True) for cell in row.find_all(["td", "th"])
             ]
 
-            row_data.append(link)
-
+            row_data.append(result_link)
             rows_data.append(row_data)
 
     all_rows_data.extend(rows_data)
-
 
 columns = [
     "ردیف",
@@ -44,7 +50,7 @@ columns = [
     "گروه خدمت",
     "تاريخ اعلام نیاز",
     "مهلت ارسال پاسخ",
-    "لینک"
+    "لینک",
 ]
 
 df = pd.DataFrame(all_rows_data, columns=columns)
