@@ -3,12 +3,13 @@ import pandas as pd
 from bs4 import BeautifulSoup
 
 page = 1
-url = f"https://eproc.setadiran.ir/eproc/needs.do?pager=true&d-146909-p={page}"
 
 all_rows_data = []
 
-for i in range(0, 30):
+for i in range(1,31):
     page += 1
+    url = f"https://eproc.setadiran.ir/eproc/needs.do?pager=true&d-146909-p={page}"
+
     response = requests.get(url)
     soup = BeautifulSoup(response.text, "html.parser")
 
@@ -29,6 +30,7 @@ for i in range(0, 30):
             rows_data.append(row_data)
 
     all_rows_data.extend(rows_data)
+
 
 columns = [
     "ردیف",
