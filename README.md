@@ -17,17 +17,17 @@ This project is designed to scrape data from the Setadiran e-procurement website
 
 ## Installation
 
-**Clone the repository:**
+1. **Clone the repository:**
 
    ```bash
    git clone https://github.com/your-username/setadiran-web-scraping.git
    cd setadiran-web-scraping
+   pip install -r requirements.txt
+
 
 Install the required packages:
 
-```bash
-pip install -r requirements.txt
 
-**Author**
+2. **Author**
 Recommended by Behzad Almasi and coding by Radin Almasi
 Smile and have a good day!
